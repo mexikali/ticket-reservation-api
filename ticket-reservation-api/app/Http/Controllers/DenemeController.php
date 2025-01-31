@@ -28,7 +28,7 @@ class DenemeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return response()->json(['message' => $id], 200);
     }
 
     /**
