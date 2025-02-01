@@ -62,9 +62,10 @@ class AuthController extends Controller
     public function refresh()
     {
         try {
+            $oldtoken = auth()->getToken();
             $newToken = auth()->refresh();
             // Eski token'ı geçersiz kıl
-            auth()->invalidate();
+            auth()->invalidate($oldtoken);
             return response()->json([
                 'access_token' => $newToken,
                 'token_type' => 'bearer',
@@ -80,12 +81,15 @@ class AuthController extends Controller
     {
         try {
             $token = auth()->getToken();
-            auth()->invalidate($token); // Token'i geçersiz kıl
+            auth()->invalidate($token);
+
             return response()->json(['message' => 'Successfully logged out'], 200);
+
         } catch (\Exception $e) {
             return response()->json(['error' => 'Logout failed'], 500);
         }
     }
+
 
     // Token bilgilerini döndürme fonksiyonu
     protected function respondWithToken($token)
