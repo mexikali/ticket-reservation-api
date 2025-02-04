@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 use Illuminate\Http\Request;
+use App\Http\Middleware\LogRequestResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(function (Request $request) {
             return response()->json(['error' => 'Unauthorized'], 401);
         });
+        $middleware->append(LogRequestResponse::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // JWT Hataları
