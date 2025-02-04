@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\SeatController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\AdminMiddleware;
 
 // Authentication routes
@@ -40,7 +41,16 @@ Route::group(['prefix' => 'seats'], function () {
     Route::put('/{id}', [SeatController::class, 'update'])->middleware(AdminMiddleware::class); // Koltuğu güncelle (Admin Only)
     Route::delete('/{id}', [SeatController::class, 'destroy'])->middleware(AdminMiddleware::class); // Koltuğu sil (Admin Only)
     Route::post('/block', [SeatController::class, 'blockSeats']);
-    Route::post('/release', [SeatController::class, 'releaseSeats']);
+    Route::delete('/release', [SeatController::class, 'releaseSeats']);
 });
 Route::get('/events/{id}/seats', [SeatController::class, 'getSeatsByEvent']);
 Route::get('/venues/{id}/seats', [SeatController::class, 'getSeatsByVenue']);
+
+// Reservation Routes
+Route::prefix('reservations')->group(function () {
+    Route::post('/', [ReservationController::class, 'store']);
+    Route::get('/', [ReservationController::class, 'index']);
+    Route::get('/{id}', [ReservationController::class, 'show']);
+    Route::post('/{id}/confirm', [ReservationController::class, 'confirm']);
+    Route::delete('/{id}', [ReservationController::class, 'destroy']);
+});
