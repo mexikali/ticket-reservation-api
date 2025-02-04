@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\TicketController;
 use App\Http\Middleware\AdminMiddleware;
 
 // Authentication routes
@@ -53,4 +54,12 @@ Route::prefix('reservations')->group(function () {
     Route::get('/{id}', [ReservationController::class, 'show']);
     Route::post('/{id}/confirm', [ReservationController::class, 'confirm']);
     Route::delete('/{id}', [ReservationController::class, 'destroy']);
+});
+
+// Ticket Routes
+Route::prefix('tickets')->group(function () {
+    Route::get('/', [TicketController::class, 'index']);
+    Route::get('/{id}', [TicketController::class, 'show']);
+    Route::get('/{id}/download', [TicketController::class, 'download']);
+    Route::post('/{id}/transfer', [TicketController::class, 'transfer']);
 });

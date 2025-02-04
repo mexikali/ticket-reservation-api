@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use App\Models\ReservationItem;
+use App\Models\Ticket;
 use App\Models\Seat;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReservationController extends Controller
 {
@@ -95,17 +99,30 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Reservation not found'], 404);
         }
 
+        if ($reservation->status !== 'pending') {
+            return response()->json(['message' => 'Reservation is not pending'], 400);
+        }
+
         if ($reservation->isExpired()) {
             return response()->json(['error' => 'Reservation expired'], 400);
         }
 
         // Koltukları "sold" yap
         foreach ($reservation->items as $item) {
+            Ticket::create([
+                'reservation_id' => $reservation->id,
+                'seat_id' => $item->seat_id,
+                'ticket_code' => Str::uuid(),
+                'status' => 'valid'
+            ]);
+
             $item->seat->update(['status' => 'sold']);
         }
 
         $reservation->update(['status' => 'confirmed']);
-        return response()->json(['message' => 'Reservation confirmed']);
+
+        
+        return response()->json(['message' => 'Reservation confirmed and tickets created'], 200);
     }
 
     // Rezervasyonu iptal et
@@ -117,8 +134,17 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Reservation not found'], 404);
         }
 
+        $event = $reservation->event;
+
+        if (Carbon::now()->diffInHours($event->start_date, false) < 24) {
+            return response()->json(['message' => 'Reservations can only be canceled at least 24 hours before the event'], 400);
+        }
+
         DB::beginTransaction();
         try {
+
+            Ticket::where('reservation_id', $reservation->id)->delete();
+
             // Koltukları tekrar "available" yap
             foreach ($reservation->items as $item) {
                 $item->seat->update(['status' => 'available']);
@@ -129,7 +155,7 @@ class ReservationController extends Controller
             $reservation->delete();
             DB::commit();
 
-            return response()->json(['message' => 'Reservation cancelled and seats released']);
+            return response()->json(['message' => 'Reservation and tickets deleted, seats are now available']);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => 'Cancellation failed', 'message' => $e->getMessage()], 500);
