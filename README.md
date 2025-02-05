@@ -1,147 +1,150 @@
+# 📌 Rezervasyon & Bilet Sistemi
 
-    <h1>📌 Rezervasyon & Bilet Sistemi</h1>
+## 📖 Uygulama Tanıtımı
+Bu uygulama, etkinlikler için rezervasyon ve biletleme işlemlerini yöneten bir **Laravel 11** tabanlı **RESTful API** projesidir. Kullanıcılar etkinliklere rezervasyon yapabilir, bilet satın alabilir ve biletlerini transfer edebilir. Ayrıca sistem, **JWT authentication**, **rate limiting**, **otomatik rezervasyon süresi yönetimi** gibi gelişmiş özellikler içerir.
 
-    <h2>📖 Uygulama Tanıtımı</h2>
-    <p>Bu uygulama, etkinlikler için rezervasyon ve biletleme işlemlerini yöneten bir <strong>Laravel 11</strong> tabanlı <strong>RESTful API</strong> projesidir. Kullanıcılar etkinliklere rezervasyon yapabilir, bilet satın alabilir ve biletlerini transfer edebilir. Ayrıca sistem, <strong>JWT authentication</strong>, <strong>rate limiting</strong>, <strong>otomatik rezervasyon süresi yönetimi</strong> gibi gelişmiş özellikler içerir.</p>
+---
 
-    <hr>
+## 🚀 Kullanılan Teknolojiler
+- **PHP**
+- **Laravel 11 Framework**
+- **MySQL**
+- **RESTful API standartları**
+- **JWT (JSON Web Token) authentication**
 
-    <h2>🚀 Kullanılan Teknolojiler</h2>
-    <ul>
-        <li><strong>PHP</strong></li>
-        <li><strong>Laravel 11 Framework</strong></li>
-        <li><strong>MySQL</strong></li>
-        <li><strong>RESTful API standartları</strong></li>
-        <li><strong>JWT (JSON Web Token) authentication</strong></li>
-    </ul>
+---
 
-    <hr>
+## 🛠️ Kurulum Talimatları
 
-    <h2>🛠️ Kurulum Talimatları</h2>
+### 1️⃣ Projeyi Klonlayın
+```bash
+git clone https://github.com/mexikali/ticket-reservation-api.git
+cd ticket-reservation-api/ticket-reservation-api
+```
 
-    <h3>1️⃣ Projeyi Klonlayın</h3>
-    <pre><code>git clone https://github.com/kullanici/rezervasyon-sistemi.git
-cd rezervasyon-sistemi</code></pre>
+### 2️⃣ Gerekli Bağımlılıkları Kurun
+```bash
+composer install
+```
 
-    <h3>2️⃣ Gerekli Bağımlılıkları Kurun</h3>
-    <pre><code>composer install</code></pre>
+### 3️⃣ Çevre Değişkenlerini Ayarlayın (.env)
+```bash
+cp .env.example .env
+```
+Daha sonra **.env** dosyanızı açarak **veritabanı bilgilerinizi** güncelleyin.
 
-    <h3>3️⃣ Çevre Değişkenlerini Ayarlayın (.env)</h3>
-    <pre><code>cp .env.example .env</code></pre>
-    <p>Daha sonra <strong>.env</strong> dosyanızı açarak <strong>veritabanı bilgilerinizi</strong> güncelleyin.</p>
+### 4️⃣ Uygulama Anahtarını Oluşturun
+```bash
+php artisan key:generate
+```
 
-    <h3>4️⃣ Uygulama Anahtarını Oluşturun</h3>
-    <pre><code>php artisan key:generate</code></pre>
+### 5️⃣ Veritabanını Migrasyon ve Seeder ile Hazırlayın
+```bash
+php artisan migrate --seed
+```
+Bu komut:
+- ✅ Gerekli tabloları oluşturur
+- ✅ Varsayılan admin kullanıcısını ve örnek verileri ekler
 
-    <h3>5️⃣ Veritabanını Migrasyon ve Seeder ile Hazırlayın</h3>
-    <pre><code>php artisan migrate --seed</code></pre>
-    <p>Bu komut:</p>
-    <ul>
-        <li>✅ Gerekli tabloları oluşturur</li>
-        <li>✅ Varsayılan admin kullanıcısını ve örnek verileri ekler</li>
-    </ul>
+### 6️⃣ Uygulamayı Çalıştırın
+```bash
+php artisan serve
+```
+API **http://127.0.0.1:8000** adresinde çalışacaktır.
 
-    <h3>6️⃣ Uygulamayı Çalıştırın</h3>
-    <pre><code>php artisan serve</code></pre>
-    <p>API <strong>http://127.0.0.1:8000</strong> adresinde çalışacaktır.</p>
+---
 
-    <hr>
+## 🧪 Testler
+```bash
+php artisan test
+```
+Tüm testlerin başarılı olduğundan emin olun! ✅
 
-    <h2>🧪 Testler</h2>
-    <pre><code>php artisan test</code></pre>
-    <p>Tüm testlerin başarılı olduğundan emin olun! ✅</p>
+---
 
-    <hr>
+## ⏳ Zamanlanmış İşlerin Çalıştırılması (Schedule Work)
+Sistem, rezervasyonların süresini kontrol eden ve **15 dakika dolduğunda otomatik olarak koltukları serbest bırakan** bir schedule job içerir.
+```bash
+php artisan schedule:work
+```
+Alternatif olarak Linux **crontab** içine şu satırı ekleyebilirsiniz:
+```bash
+* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1
+```
+Bu sayede rezervasyonlar **otomatik olarak süre sonunda iptal edilecektir**.
 
-    <h2>⏳ Zamanlanmış İşlerin Çalıştırılması (Schedule Work)</h2>
-    <p>Sistem, rezervasyonların süresini kontrol eden ve <strong>15 dakika dolduğunda otomatik olarak koltukları serbest bırakan</strong> bir schedule job içerir.</p>
-    
-    <pre><code>php artisan schedule:work</code></pre>
+---
 
-    <p>Alternatif olarak Linux <strong>crontab</strong> içine şu satırı ekleyebilirsiniz:</p>
-    <pre><code>* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1</code></pre>
+## 📜 API Kullanımı
+Tüm API uç noktalarına erişmek için **Scramble** dokümantasyonu mevcuttur.
 
-    <p>Bu sayede rezervasyonlar <strong>otomatik olarak süre sonunda iptal edilecektir</strong>.</p>
+🔗 **API Dokümantasyonu:** [http://127.0.0.1:8000/docs/api](http://127.0.0.1:8000/docs/api)
 
-    <hr>
+---
 
-    <h2>📜 API Kullanımı</h2>
-    <p>Tüm API uç noktalarına erişmek için <strong>Swagger/OpenAPI</strong> dokümantasyonu mevcuttur.</p>
+## 🔐 Authentication API  
+| HTTP Method | Endpoint | Açıklama |  
+|------------|---------|----------|  
+| POST | `/api/auth/register` | Kullanıcı kaydı oluşturur |  
+| POST | `/api/auth/login` | Kullanıcı giriş yapar ve JWT token alır |  
+| POST | `/api/auth/refresh` | JWT token yeniler |  
+| POST | `/api/auth/logout` | Kullanıcı çıkış yapar |  
 
-    <p>🔗 <strong>API Dokümantasyonu:</strong> <a href="http://127.0.0.1:8000/docs/api">http://127.0.0.1:8000/docs/api</a></p>
+---
 
-    <hr>
+## 🎟️ Etkinlik İşlemleri  
+| HTTP Method | Endpoint | Açıklama |  
+|------------|---------|----------|  
+| GET | `/api/events` | Tüm etkinlikleri listeler |  
+| GET | `/api/events/{id}` | Belirli bir etkinliği getirir |  
+| POST | `/api/events` | Yeni etkinlik oluşturur (Sadece Admin) |  
+| PUT | `/api/events/{id}` | Etkinlik bilgilerini günceller (Sadece Admin) |  
+| DELETE | `/api/events/{id}` | Etkinliği siler (Sadece Admin) |  
 
-    <h2>🔐 Authentication API</h2>
-    <table border="1">
-        <tr>
-            <th>HTTP Method</th>
-            <th>Endpoint</th>
-            <th>Açıklama</th>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/auth/register</td>
-            <td>Kullanıcı kaydı oluşturur</td>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/auth/login</td>
-            <td>Kullanıcı giriş yapar ve JWT token alır</td>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/auth/refresh</td>
-            <td>JWT token yeniler</td>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/auth/logout</td>
-            <td>Kullanıcı çıkış yapar</td>
-        </tr>
-    </table>
+---
 
-    <hr>
+## 💺 Koltuk İşlemleri  
+| HTTP Method | Endpoint | Açıklama |  
+|------------|---------|----------|  
+| GET | `/api/events/{id}/seats` | Belirli bir etkinliğin koltuklarını listeler |  
+| GET | `/api/venues/{id}/seats` | Belirli bir mekanın koltuklarını listeler |  
+| POST | `/api/seats/block` | Belirli koltukları geçici olarak rezerve eder |  
+| DELETE | `/api/seats/release` | Bloke edilen koltukları serbest bırakır |  
 
-    <h2>🎫 Bilet İşlemleri</h2>
-    <table border="1">
-        <tr>
-            <th>HTTP Method</th>
-            <th>Endpoint</th>
-            <th>Açıklama</th>
-        </tr>
-        <tr>
-            <td>GET</td>
-            <td>/api/tickets</td>
-            <td>Kullanıcının biletlerini listeler</td>
-        </tr>
-        <tr>
-            <td>GET</td>
-            <td>/api/tickets/{id}</td>
-            <td>Belirli bir bileti getirir</td>
-        </tr>
-        <tr>
-            <td>GET</td>
-            <td>/api/tickets/{id}/download</td>
-            <td>Bileti PDF olarak indirir</td>
-        </tr>
-        <tr>
-            <td>POST</td>
-            <td>/api/tickets/{id}/transfer</td>
-            <td>Bileti başka bir kullanıcıya transfer eder</td>
-        </tr>
-    </table>
+---
 
-    <hr>
+## 📌 Rezervasyon İşlemleri  
+| HTTP Method | Endpoint | Açıklama |  
+|------------|---------|----------|  
+| POST | `/api/reservations` | Yeni rezervasyon oluşturur |  
+| GET | `/api/reservations` | Kullanıcının tüm rezervasyonlarını listeler |  
+| GET | `/api/reservations/{id}` | Belirli bir rezervasyonu getirir |  
+| POST | `/api/reservations/{id}/confirm` | Rezervasyonu onaylar ve bileti oluşturur |  
+| DELETE | `/api/reservations/{id}` | Rezervasyonu iptal eder |  
 
-    <h2>⚖️ Önemli İş Kuralları</h2>
-    <h3>1️⃣ Rezervasyon İşlemleri</h3>
-    <ul>
-        <li>Koltuk müsaitlik kontrolü yapılmalı</li>
-        <li>Rezervasyon süresi <strong>15 dakika</strong> olmalı</li>
-        <li>Aynı koltuk eşzamanlı olarak başkası tarafından rezerve edilememeli</li>
-        <li>Rezervasyon süresi dolduğunda koltuklar <strong>otomatik olarak serbest bırakılmalı</strong></li>
-    </ul>
+---
 
-    <hr>
+## 🎫 Bilet İşlemleri  
+| HTTP Method | Endpoint | Açıklama |  
+|------------|---------|----------|  
+| GET | `/api/tickets` | Kullanıcının biletlerini listeler |  
+| GET | `/api/tickets/{id}` | Belirli bir bileti getirir |  
+| GET | `/api/tickets/{id}/download` | Bileti PDF olarak indirir |  
+| POST | `/api/tickets/{id}/transfer` | Bileti başka bir kullanıcıya transfer eder |  
+
+---
+
+## ⚖️ Önemli Kurallar: 
+
+### 1️⃣ Rezervasyon İşlemleri  
+- **Koltuk müsaitlik kontrolü yapılmalı.**  
+- **Rezervasyon süresi 15 dakika olmalı.**  
+- **Aynı koltuk eşzamanlı olarak başkası tarafından rezerve edilememeli.**  
+- **Rezervasyon süresi dolduğunda koltuklar otomatik olarak serbest bırakılmalı.**  
+
+### 2️⃣ Bilet İşlemleri  
+- **Her bilet için benzersiz bir kod oluşturulmalı.**  
+- **Bilet transferi sadece kullanılmamış biletler için yapılabilmeli.**  
+- **Satın alınan biletler PDF formatında indirilebilmeli.**  
+- **Bilet iptali, etkinlik başlangıç tarihinden en az 24 saat öncesine kadar yapılabilmeli.**  
 
