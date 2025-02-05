@@ -43,7 +43,7 @@ Route::middleware(['throttle:global'])->group(function () {
         Route::post('/', [SeatController::class, 'store'])->middleware(AdminMiddleware::class); // Koltuk ekle (Admin Only)
         Route::get('/{id}', [SeatController::class, 'show']); // Tek bir koltuk getir
         Route::put('/{id}', [SeatController::class, 'update'])->middleware(AdminMiddleware::class); // Koltuğu güncelle (Admin Only)
-        Route::delete('/{id}', [SeatController::class, 'destroy'])->middleware(AdminMiddleware::class); // Koltuğu sil (Admin Only)
+        Route::delete('/{id}/delete', [SeatController::class, 'destroy'])->middleware(AdminMiddleware::class); // Koltuğu sil (Admin Only)
         Route::post('/block', [SeatController::class, 'blockSeats']);
         Route::delete('/release', [SeatController::class, 'releaseSeats']);
     });
