@@ -6,7 +6,7 @@ Bu uygulama, etkinlikler için rezervasyon ve biletleme işlemlerini yöneten bi
 ---
 
 ## 🚀 Kullanılan Teknolojiler
-- **PHP**
+- **PHP 8.2**
 - **Laravel 11 Framework**
 - **MySQL**
 - **RESTful API standartları**
