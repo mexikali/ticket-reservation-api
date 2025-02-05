@@ -15,7 +15,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->configureRateLimiting();
 
         $this->routes(function () {
             
@@ -28,15 +27,4 @@ class RouteServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * This function configures the rate limiting. If users send more than 100 requests in a minute,
-     * they will get a "429 Too Many Requests" message.
-     * It checks the user ID for logged users and the IP address for not logged users.
-     */
-    protected function configureRateLimiting(): void
-    {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(100)->by($request->user()?->id ?: $request->ip());
-        });
-    }
 }

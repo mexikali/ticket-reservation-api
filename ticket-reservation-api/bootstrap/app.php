@@ -8,6 +8,8 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 use Illuminate\Http\Request;
 use App\Http\Middleware\LogRequestResponse;
@@ -47,6 +49,16 @@ return Application::configure(basePath: dirname(__DIR__))
         // Olmayan Endpoint (404) Hatası
         $exceptions->renderable(function (NotFoundHttpException $e, $request) {
             return response()->json(['error' => 'Endpoint not found'], 404);
+        });
+
+        // rate limiting
+        $exceptions->renderable(function (HttpException $e, $request) {
+            if ($e instanceof ThrottleRequestsException) {
+                return response()->json([
+                    'error' => 'Too Many Requests',
+                    'message' => 'You have exceeded the request limit.'
+                ], 429);
+            }
         });
 
         // Genel Hata Yakalama (Diğer tüm hatalar için)
