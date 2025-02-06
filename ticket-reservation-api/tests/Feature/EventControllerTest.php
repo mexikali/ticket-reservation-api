@@ -16,9 +16,10 @@ class EventControllerTest extends TestCase
     /** @test */
     public function it_fetches_all_events()
     {
+        $user = User::factory()->create();
         Event::factory(5)->create();
 
-        $response = $this->getJson('/api/events');
+        $response = $this->actingAs($user)->getJson('/api/events');
         
         $response->assertStatus(200)
                 ->assertJsonStructure(['*' => ['id', 'name', 'description', 'start_date', 'end_date']]);
