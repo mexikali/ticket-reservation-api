@@ -22,7 +22,7 @@ Route::middleware(['throttle:global'])->group(function () {
 
     // Venue Routes
     Route::group(['prefix' => 'venues'], function () {
-        Route::get('/', [VenueController::class, 'index']);
+        Route::get('/', [VenueController::class, 'index'])->middleware('auth:api');;
         Route::post('/', [VenueController::class, 'store'])->middleware(AdminMiddleware::class);
         Route::put('/{id}', [VenueController::class, 'update'])->middleware(AdminMiddleware::class);
         Route::delete('/{id}', [VenueController::class, 'destroy'])->middleware(AdminMiddleware::class);
@@ -30,8 +30,8 @@ Route::middleware(['throttle:global'])->group(function () {
 
     // Event Routes
     Route::group(['prefix' => 'events'], function () {
-        Route::get('/', [EventController::class, 'index']);
-        Route::get('/{id}', [EventController::class, 'show']);
+        Route::get('/', [EventController::class, 'index'])->middleware('auth:api');;
+        Route::get('/{id}', [EventController::class, 'show'])->middleware('auth:api');;
         Route::post('/', [EventController::class, 'store'])->middleware(AdminMiddleware::class);
         Route::put('/{id}', [EventController::class, 'update'])->middleware(AdminMiddleware::class);
         Route::delete('/{id}', [EventController::class, 'destroy'])->middleware(AdminMiddleware::class);
@@ -39,32 +39,32 @@ Route::middleware(['throttle:global'])->group(function () {
 
     // Seat Routes
     Route::group(['prefix' => 'seats'], function () {
-        Route::get('/', [SeatController::class, 'index']); // Tüm koltukları listele
+        Route::get('/', [SeatController::class, 'index'])->middleware('auth:api');; // Tüm koltukları listele
         Route::post('/', [SeatController::class, 'store'])->middleware(AdminMiddleware::class); // Koltuk ekle (Admin Only)
-        Route::get('/{id}', [SeatController::class, 'show']); // Tek bir koltuk getir
+        Route::get('/{id}', [SeatController::class, 'show'])->middleware('auth:api');; // Tek bir koltuk getir
         Route::put('/{id}', [SeatController::class, 'update'])->middleware(AdminMiddleware::class); // Koltuğu güncelle (Admin Only)
         Route::delete('/{id}/delete', [SeatController::class, 'destroy'])->middleware(AdminMiddleware::class); // Koltuğu sil (Admin Only)
-        Route::post('/block', [SeatController::class, 'blockSeats']);
-        Route::delete('/release', [SeatController::class, 'releaseSeats']);
+        Route::post('/block', [SeatController::class, 'blockSeats'])->middleware('auth:api');;
+        Route::delete('/release', [SeatController::class, 'releaseSeats'])->middleware('auth:api');;
     });
-    Route::get('/events/{id}/seats', [SeatController::class, 'getSeatsByEvent']);
-    Route::get('/venues/{id}/seats', [SeatController::class, 'getSeatsByVenue']);
+    Route::get('/events/{id}/seats', [SeatController::class, 'getSeatsByEvent'])->middleware('auth:api');;
+    Route::get('/venues/{id}/seats', [SeatController::class, 'getSeatsByVenue'])->middleware('auth:api');;
 
     // Reservation Routes
     Route::prefix('reservations')->group(function () {
-        Route::post('/', [ReservationController::class, 'store']);
-        Route::get('/', [ReservationController::class, 'index']);
-        Route::get('/{id}', [ReservationController::class, 'show']);
-        Route::post('/{id}/confirm', [ReservationController::class, 'confirm']);
-        Route::delete('/{id}', [ReservationController::class, 'destroy']);
+        Route::post('/', [ReservationController::class, 'store'])->middleware('auth:api');;
+        Route::get('/', [ReservationController::class, 'index'])->middleware('auth:api');;
+        Route::get('/{id}', [ReservationController::class, 'show'])->middleware('auth:api');;
+        Route::post('/{id}/confirm', [ReservationController::class, 'confirm'])->middleware('auth:api');;
+        Route::delete('/{id}', [ReservationController::class, 'destroy'])->middleware('auth:api');;
     });
 
     // Ticket Routes
     Route::prefix('tickets')->group(function () {
-        Route::get('/', [TicketController::class, 'index']);
-        Route::get('/{id}', [TicketController::class, 'show']);
-        Route::get('/{id}/download', [TicketController::class, 'download']);
-        Route::post('/{id}/transfer', [TicketController::class, 'transfer']);
+        Route::get('/', [TicketController::class, 'index'])->middleware('auth:api');;
+        Route::get('/{id}', [TicketController::class, 'show'])->middleware('auth:api');;
+        Route::get('/{id}/download', [TicketController::class, 'download'])->middleware('auth:api');;
+        Route::post('/{id}/transfer', [TicketController::class, 'transfer'])->middleware('auth:api');;
     });
 
 });
